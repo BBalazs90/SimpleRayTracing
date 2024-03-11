@@ -31,6 +31,10 @@ struct Vec3f{
         return lhs.x * rhs.x + lhs.y * rhs.y + lhs.z * rhs.z
     }
     
+    static func * (lhs: Float, rhs: Vec3f) -> Vec3f {
+        return Vec3f(x: lhs * rhs.x, y: lhs * rhs.y, z: lhs * rhs.z)
+    }
+    
     subscript(index: Int) -> Float {
         get {
             switch index {
@@ -44,9 +48,14 @@ struct Vec3f{
     }
 }
 
+struct Material {
+    let diffuseColor: Vec3f
+}
+
 struct Sphere {
     let center: Vec3f
     let radius: Float
+    let material: Material
     
     func rayIntersects(startedFrom rayOrigin: Vec3f, towards rayDirection: Vec3f) -> (doesIntersect: Bool, intersectionDistance: Float){
         let raySourceToSphereCenter = center - rayOrigin
@@ -70,15 +79,35 @@ struct Sphere {
     }
 }
 
-func castRay(startedFrom rayOrigin: Vec3f, towards rayDirection: Vec3f, on sphere: Sphere) -> Vec3f{
-    if !sphere.rayIntersects(startedFrom: rayOrigin, towards: rayDirection).doesIntersect{
+func sceneIntersect(startedFrom rayOrigin: Vec3f, towards rayDirection: Vec3f, with spheres: [Sphere]) -> (doesIntersect: Bool, rayHitCoord: Vec3f?, surfaceNormal: Vec3f?, material: Material?){
+    
+    var spheresDistance = Float.infinity
+    var rayHitCoord: Vec3f?
+    var surfaceNormal: Vec3f?
+    var material: Material?
+    
+    for sphere in spheres {
+        let (doesIntersect, distance) = sphere.rayIntersects(startedFrom: rayOrigin, towards: rayDirection)
+        if doesIntersect && distance < spheresDistance {
+            spheresDistance = distance
+            rayHitCoord = rayOrigin + (distance * rayDirection)
+            surfaceNormal = (rayHitCoord! - sphere.center).normalize()
+            material = sphere.material
+        }
+    }
+    return (spheresDistance < 1000, rayHitCoord, surfaceNormal, material)
+}
+
+func castRay(startedFrom rayOrigin: Vec3f, towards rayDirection: Vec3f, on spheres: [Sphere]) -> Vec3f{
+    let intersectCalcResult = sceneIntersect(startedFrom: rayOrigin, towards: rayDirection, with: spheres)
+    if !intersectCalcResult.doesIntersect{
         return Vec3f(x: 0.2, y: 0.7, z: 0.8)
     }
     
-    return Vec3f(x: 0.4, y: 0.4, z: 0.3)
+    return intersectCalcResult.material!.diffuseColor
 }
 
-func render() -> Void{
+func render(with spheres: [Sphere]) -> Void{
     let file = "testfile.ppm"
     let width = 1024
     let height = 768
@@ -89,7 +118,7 @@ func render() -> Void{
             let x =  (2.0*(Float(i)+0.5) / Float(width) -  1) * tanf(fieldOfViewAngle/2.0)*Float(width)/Float(height)
             let y = -(2.0*(Float(j)+0.5) / Float(height) - 1) * tanf(fieldOfViewAngle/2.0)
             let dir = Vec3f(x: x, y: y, z: -1).normalize()
-            buffer[i + j*width] = castRay(startedFrom: Vec3f(x: 0, y: 0, z: 0), towards: dir, on: Sphere(center: Vec3f(x: -3, y: 0, z: -16), radius: 2))
+            buffer[i + j*width] = castRay(startedFrom: Vec3f(x: 0, y: 0, z: 0), towards: dir, on: spheres)
         }
     }
     
@@ -116,6 +145,12 @@ func render() -> Void{
     }
 }
 
+let ivory = Material(diffuseColor: Vec3f(x: 0.4, y: 0.4, z: 0.3))
+let redRubber = Material(diffuseColor: Vec3f(x: 0.3, y: 0.1, z: 0.1))
+let spheres = [Sphere(center: Vec3f(x: -3, y: 0, z: -16), radius: 2, material: ivory),
+               Sphere(center: Vec3f(x: -1, y: -1.5, z: -12), radius: 2, material: redRubber),
+               Sphere(center: Vec3f(x: 1.5, y: -0.5, z: -18), radius: 3, material: redRubber),
+               Sphere(center: Vec3f(x: 7, y: 5, z: -18), radius: 4, material: ivory)]
 
-render()
+render(with: spheres)
 
