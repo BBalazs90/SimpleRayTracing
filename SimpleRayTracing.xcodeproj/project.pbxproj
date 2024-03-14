@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		983BA2672B9CF0B1007EF22A /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 983BA2662B9CF0B1007EF22A /* main.swift */; };
+		983BA26E2BA3896A007EF22A /* vec3f.swift in Sources */ = {isa = PBXBuildFile; fileRef = 983BA26D2BA38969007EF22A /* vec3f.swift */; };
+		983BA2702BA389A1007EF22A /* sphere.swift in Sources */ = {isa = PBXBuildFile; fileRef = 983BA26F2BA389A1007EF22A /* sphere.swift */; };
+		983BA2722BA389DF007EF22A /* light.swift in Sources */ = {isa = PBXBuildFile; fileRef = 983BA2712BA389DF007EF22A /* light.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -25,6 +28,9 @@
 /* Begin PBXFileReference section */
 		983BA2632B9CF0B1007EF22A /* SimpleRayTracing */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = SimpleRayTracing; sourceTree = BUILT_PRODUCTS_DIR; };
 		983BA2662B9CF0B1007EF22A /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		983BA26D2BA38969007EF22A /* vec3f.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = vec3f.swift; sourceTree = "<group>"; };
+		983BA26F2BA389A1007EF22A /* sphere.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = sphere.swift; sourceTree = "<group>"; };
+		983BA2712BA389DF007EF22A /* light.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = light.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +64,9 @@
 			isa = PBXGroup;
 			children = (
 				983BA2662B9CF0B1007EF22A /* main.swift */,
+				983BA26D2BA38969007EF22A /* vec3f.swift */,
+				983BA26F2BA389A1007EF22A /* sphere.swift */,
+				983BA2712BA389DF007EF22A /* light.swift */,
 			);
 			path = SimpleRayTracing;
 			sourceTree = "<group>";
@@ -120,7 +129,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				983BA2702BA389A1007EF22A /* sphere.swift in Sources */,
 				983BA2672B9CF0B1007EF22A /* main.swift in Sources */,
+				983BA2722BA389DF007EF22A /* light.swift in Sources */,
+				983BA26E2BA3896A007EF22A /* vec3f.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
