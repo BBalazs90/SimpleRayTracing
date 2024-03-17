@@ -10,7 +10,13 @@ import Foundation
 let fieldOfViewAngle:Float = 1.6
 
 struct Material {
+    let albedo: Vec2f
     let diffuseColor: Vec3f
+    let specularExponent: Float
+}
+
+func reflect(from lightSourceDir: Vec3f, at surfaceNormal: Vec3f) -> Vec3f{
+    lightSourceDir - (2.0*surfaceNormal)*(lightSourceDir*surfaceNormal)
 }
 
 func sceneIntersect(startedFrom rayOrigin: Vec3f, towards rayDirection: Vec3f, with spheres: [Sphere]) -> (doesIntersect: Bool, rayHitCoord: Vec3f?, surfaceNormal: Vec3f?, material: Material?){
@@ -39,13 +45,20 @@ func castRay(startedFrom rayOrigin: Vec3f, towards rayDirection: Vec3f, on spher
     }
     
     var diffuseLightIntensity: Float = 0
+    var specularLightIntensity: Float = 0
     
     for light in lights {
         let lightDir = (light.position - intersectCalcResult.rayHitCoord!).normalize()
         diffuseLightIntensity += light.intensity * max(0, lightDir*intersectCalcResult.surfaceNormal!)
+        specularLightIntensity += powf(max(0, -1*reflect(from: -1*lightDir, at: intersectCalcResult.surfaceNormal!)*rayDirection), intersectCalcResult.material!.specularExponent)*light.intensity
     }
     
-    return diffuseLightIntensity * intersectCalcResult.material!.diffuseColor
+    return diffuseLightIntensity 
+    * intersectCalcResult.material!.diffuseColor
+    * intersectCalcResult.material!.albedo[0]
+    + Vec3f(x: 1, y: 1, z: 1)
+    * specularLightIntensity
+    * intersectCalcResult.material!.albedo[1]
 }
 
 func render(with spheres: [Sphere], and lights: [Light]) -> Void{
@@ -86,14 +99,14 @@ func render(with spheres: [Sphere], and lights: [Light]) -> Void{
     }
 }
 
-let ivory = Material(diffuseColor: Vec3f(x: 0.4, y: 0.4, z: 0.3))
-let redRubber = Material(diffuseColor: Vec3f(x: 0.3, y: 0.1, z: 0.1))
+let ivory = Material(albedo: Vec2f(x: 0.6, y: 0.9), diffuseColor: Vec3f(x: 0.4, y: 0.4, z: 0.3), specularExponent: 50)
+let redRubber = Material(albedo: Vec2f(x: 0.9, y: 0.1), diffuseColor: Vec3f(x: 0.3, y: 0.1, z: 0.1), specularExponent: 10)
 let spheres = [Sphere(center: Vec3f(x: -3, y: 0, z: -16), radius: 2, material: ivory),
                Sphere(center: Vec3f(x: -1, y: -1.5, z: -12), radius: 2, material: redRubber),
                Sphere(center: Vec3f(x: 1.5, y: -0.5, z: -18), radius: 3, material: redRubber),
                Sphere(center: Vec3f(x: 7, y: 5, z: -18), radius: 4, material: ivory)]
 
-let lights = [Light(position: Vec3f(x: -20, y: 20, z: 20), intensity: 1)]
+let lights = [Light(position: Vec3f(x: -20, y: 20, z: 20), intensity: 2)]
 
 render(with: spheres, and: lights)
 

@@ -33,6 +33,10 @@ struct Vec3f{
         return Vec3f(x: lhs * rhs.x, y: lhs * rhs.y, z: lhs * rhs.z)
     }
     
+    static func * (lhs: Vec3f, rhs: Float) -> Vec3f {
+        return Vec3f(x: rhs * lhs.x, y: rhs * lhs.y, z: rhs * lhs.z)
+    }
+    
     subscript(index: Int) -> Float {
         get {
             switch index {

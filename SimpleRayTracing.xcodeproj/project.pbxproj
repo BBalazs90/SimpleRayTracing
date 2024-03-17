@@ -11,6 +11,7 @@
 		983BA26E2BA3896A007EF22A /* vec3f.swift in Sources */ = {isa = PBXBuildFile; fileRef = 983BA26D2BA38969007EF22A /* vec3f.swift */; };
 		983BA2702BA389A1007EF22A /* sphere.swift in Sources */ = {isa = PBXBuildFile; fileRef = 983BA26F2BA389A1007EF22A /* sphere.swift */; };
 		983BA2722BA389DF007EF22A /* light.swift in Sources */ = {isa = PBXBuildFile; fileRef = 983BA2712BA389DF007EF22A /* light.swift */; };
+		98C257CD2BA630DC009ED4C8 /* vec2f.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98C257CC2BA630DC009ED4C8 /* vec2f.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -31,6 +32,7 @@
 		983BA26D2BA38969007EF22A /* vec3f.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = vec3f.swift; sourceTree = "<group>"; };
 		983BA26F2BA389A1007EF22A /* sphere.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = sphere.swift; sourceTree = "<group>"; };
 		983BA2712BA389DF007EF22A /* light.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = light.swift; sourceTree = "<group>"; };
+		98C257CC2BA630DC009ED4C8 /* vec2f.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = vec2f.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -65,6 +67,7 @@
 			children = (
 				983BA2662B9CF0B1007EF22A /* main.swift */,
 				983BA26D2BA38969007EF22A /* vec3f.swift */,
+				98C257CC2BA630DC009ED4C8 /* vec2f.swift */,
 				983BA26F2BA389A1007EF22A /* sphere.swift */,
 				983BA2712BA389DF007EF22A /* light.swift */,
 			);
@@ -129,6 +132,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				98C257CD2BA630DC009ED4C8 /* vec2f.swift in Sources */,
 				983BA2702BA389A1007EF22A /* sphere.swift in Sources */,
 				983BA2672B9CF0B1007EF22A /* main.swift in Sources */,
 				983BA2722BA389DF007EF22A /* light.swift in Sources */,
