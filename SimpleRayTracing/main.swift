@@ -49,6 +49,16 @@ func castRay(startedFrom rayOrigin: Vec3f, towards rayDirection: Vec3f, on spher
     
     for light in lights {
         let lightDir = (light.position - intersectCalcResult.rayHitCoord!).normalize()
+        let lightDistance = (light.position - intersectCalcResult.rayHitCoord!).length
+        
+        let shadowOrig = lightDir*intersectCalcResult.surfaceNormal! < 0
+        ? intersectCalcResult.rayHitCoord! - 1e-3 * intersectCalcResult.surfaceNormal!
+        : intersectCalcResult.rayHitCoord! + 1e-3 * intersectCalcResult.surfaceNormal!
+        
+        let shadowCalcResult = sceneIntersect(startedFrom: shadowOrig, towards: lightDir, with: spheres)
+        if shadowCalcResult.doesIntersect
+            && (shadowCalcResult.rayHitCoord! - shadowCalcResult.surfaceNormal!).length < lightDistance { continue }
+        
         diffuseLightIntensity += light.intensity * max(0, lightDir*intersectCalcResult.surfaceNormal!)
         specularLightIntensity += powf(max(0, -1*reflect(from: -1*lightDir, at: intersectCalcResult.surfaceNormal!)*rayDirection), intersectCalcResult.material!.specularExponent)*light.intensity
     }
@@ -63,8 +73,9 @@ func castRay(startedFrom rayOrigin: Vec3f, towards rayDirection: Vec3f, on spher
 
 func render(with spheres: [Sphere], and lights: [Light]) -> Void{
     let file = "testfile.ppm"
-    let width = 1024
-    let height = 768
+    let width = 1920
+    let height = 1080
+    
     
     var buffer = Array<Vec3f>(repeating: Vec3f(x: 0.0, y: 0.0, z: 0.0), count: width*height)
     for j in 0..<height{
@@ -106,7 +117,8 @@ let spheres = [Sphere(center: Vec3f(x: -3, y: 0, z: -16), radius: 2, material: i
                Sphere(center: Vec3f(x: 1.5, y: -0.5, z: -18), radius: 3, material: redRubber),
                Sphere(center: Vec3f(x: 7, y: 5, z: -18), radius: 4, material: ivory)]
 
-let lights = [Light(position: Vec3f(x: -20, y: 20, z: 20), intensity: 2)]
+let lights = [Light(position: Vec3f(x: -20, y: 20, z: 50), intensity: 2),
+              Light(position: Vec3f(x: -20, y: 0, z: 1), intensity: 1)]
 
 render(with: spheres, and: lights)
 

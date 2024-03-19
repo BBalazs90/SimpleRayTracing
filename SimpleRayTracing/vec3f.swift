@@ -12,8 +12,9 @@ struct Vec3f{
     let y: Float
     let z: Float
     
+    var length: Float {sqrtf(x*x + y*y + z*z)}
+    
     func normalize() -> Vec3f {
-        let length = sqrtf(x*x + y*y + z*z)
         return Vec3f(x: x/length, y: y/length, z: z/length)
     }
     
